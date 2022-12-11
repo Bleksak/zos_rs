@@ -1,8 +1,8 @@
-use self::command::{CopyFile, CommandHandler, MoveFile, RemoveFile, RemoveDirectory, MakeDirectory, Listing, Concatenate, ChangeDirectory, PrintWorkingDirectory, PrintInfo, CopyIn, CopyOut, LoadCommands, Format, Bug, Check, Exit};
+use self::command::*;
 
 mod command;
 
-    pub fn get(line: &str) -> Option<Box<dyn CommandHandler>> {
+    pub fn get(line: &str) -> Option<Box<dyn CommandHandler<Error = CommandError>>> {
         
         if line.len() == 0 {
             return None;
@@ -24,7 +24,7 @@ mod command;
             "incp" => Some(Box::new(CopyIn::new(words.get(1)?.to_string(), words.get(2)?.to_string()))),
             "outcp" => Some(Box::new(CopyOut::new(words.get(1)?.to_string(), words.get(2)?.to_string()))),
             "load" => Some(Box::new(LoadCommands::new(words.get(1)?.to_string()))),
-            "format" => Some(Box::new(Format::new(words.get(1)?.parse().ok()?))),
+            "format" => Some(Box::new(Format::new(words.get(1)?.to_string()))),
             "bug" => Some(Box::new(Bug::new(words.get(1)?.to_string()))),
             "check" => Some(Box::new(Check::new())),
             "exit" => Some(Box::new(Exit::new())),
