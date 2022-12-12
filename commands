@@ -1,0 +1,32 @@
+incp input/meme.png /meme.png
+mkdir /memes
+mv /meme.png /memes/meme.png
+mkdir /files
+incp input/zero /files/zero
+incp input/random /files/random
+mkdir /videa
+incp input/vid1.wbm /videa/vid1.wbm
+incp input/vid2.wbm /videa/vid2.wbm
+mkdir /cp
+incp input/poem.jpg /cp/poem.jpg
+incp input/test.txt /cp/test.txt
+incp input/wtf.gif /cp/wtf.gif
+mkdir /cp/wtf.gif
+mv /cp/wtf.gif /wtf.gif
+mkdir /cp/wtf.gif
+mv /wtf.gif /cp/wtf.gif/wtf.gif
+mkdir /CP
+cp /cp/poem.jpg /CP/poem.jpg
+cp /cp/test.txt /CP/test.txt
+cp /cp/wtf.gif/wtf.gif /CP/WTF.gif
+rm /cp/poem.jpg
+rm /cp/test.txt
+rm /cp/wtf.gif/wtf.gif
+outcp /memes/meme.png output/meme.png
+outcp /files/zero output/zero
+outcp /files/random output/random
+outcp /videa/vid1.wbm output/vid1.wbm
+outcp /videa/vid2.wbm output/vid2.wbm
+outcp /CP/poem.jpg output/poem.jpg
+outcp /CP/test.txt output/test.txt
+outcp /CP/WTF.gif output/wtf.gif

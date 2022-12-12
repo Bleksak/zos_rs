@@ -1,6 +1,6 @@
 use std::{fmt::Display, fs::{self, File, read_to_string}};
 
-use crate::{Application, units::Unit, fat::{FAT, FATError, FATUpdate, dirent::Flags}};
+use crate::{Application, units::Unit, fat::{FATError, dirent::Flags}};
 
 use super::get;
 
@@ -64,7 +64,7 @@ impl CommandHandler for CopyFile {
     type Error = CommandError;
     
     fn handle(&self, application: &mut Application) -> Result<(), Self::Error> {
-        application.file_system.copy(&build_path(&application.current_path, Some(&self.0)), &build_path(&application.current_path, Some(&self.1))).map_err(|e| CommandError::FileNotFound)
+        application.file_system.copy(&build_path(&application.current_path, Some(&self.0)), &build_path(&application.current_path, Some(&self.1))).map_err(|_| CommandError::FileNotFound)
     }
 }
 // 2) Přesune soubor s1 do umístění s2, nebo přejmenuje s1 na s2
@@ -320,9 +320,9 @@ impl CommandHandler for CopyOut {
     type Error = CommandError;
     
     fn handle(&self, application: &mut Application) -> Result<(), Self::Error> {
-        let file = File::options().write(true).create(true).open(&self.0).map_err(|_| CommandError::FileNotFound)?;
+        let file = File::options().truncate(true).write(true).create(true).open(&self.1).map_err(|_| CommandError::FileNotFound)?;
         
-        application.file_system.cat(&build_path(&application.current_path, Some(&self.1)), file).map_err(|e| {
+        application.file_system.cat(&build_path(&application.current_path, Some(&self.0)), file).map_err(|e| {
             match e {
                 _ => CommandError::PathNotFound
             }
@@ -347,6 +347,7 @@ impl CommandHandler for LoadCommands {
         let string = read_to_string(&self.0).map_err(|_| CommandError::FileNotFound)?;
         for line in string.lines() {
             if let Some(cmd) = get(line) {
+                println!("{line}");
                 match cmd.handle(application) {
                     Ok(_) => println!("OK"),
                     Err(e) => println!("{e}"),

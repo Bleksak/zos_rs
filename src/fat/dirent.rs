@@ -80,10 +80,6 @@ impl Entry {
         self.flags = flags;
     }
     
-    pub fn set_size(&mut self, size: u32) {
-        self.size = size;
-    }
-    
     pub fn as_bytes(&self) -> [u8; 32] {
         let mut v = [0; 32];
         
