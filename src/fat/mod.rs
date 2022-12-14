@@ -136,7 +136,6 @@ impl FAT {
                 return Err(FATError::NotEnoughSpace);
             }
         }
-        // Ok(0)
     }
 
     fn empty_cluster() -> &'static [u8; 8192] {
@@ -818,8 +817,12 @@ impl FAT {
 
         let header = self.header.as_ref().unwrap();
 
-        self.file.write(&header.bytes_per_sector().to_le_bytes()).ok()?;
-        self.file.write(&header.sectors_per_cluster().to_le_bytes()).ok()?;
+        self.file
+            .write(&header.bytes_per_sector().to_le_bytes())
+            .ok()?;
+        self.file
+            .write(&header.sectors_per_cluster().to_le_bytes())
+            .ok()?;
         self.file.write(&header.sector_count().to_le_bytes()).ok()?;
         self.file.write(&header.fat_count().to_le_bytes()).ok()?;
         self.file.write(&header.checksum().to_le_bytes()).ok()?;

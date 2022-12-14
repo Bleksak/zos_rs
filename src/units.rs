@@ -1,4 +1,3 @@
-
 #[allow(non_camel_case_types)]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Unit {
@@ -23,10 +22,10 @@ impl Unit {
             "Mb" => Some(Self::Mb(count)),
             "Kb" => Some(Self::Kb(count)),
             "b" => Some(Self::b(count)),
-            _ => None
+            _ => None,
         }
     }
-    
+
     pub fn to_bytes(&self) -> usize {
         match self {
             Unit::GB(count) => count * 1024 * 1024 * 1024,

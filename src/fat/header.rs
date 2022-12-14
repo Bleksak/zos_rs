@@ -42,7 +42,7 @@ impl Header {
         }
 
         let sector_count = Self::capacity_to_sector_count(capacity);
-        
+
         let mut fat = Self {
             bytes_per_sector: BYTES_PER_SECTOR,
             sectors_per_cluster: SECTORS_PER_CLUSTER,
@@ -56,14 +56,17 @@ impl Header {
     }
 
     fn check_checksum(&self) -> Result<(), HeaderError> {
-        let sum = 
-        self
+        let sum = self
             .checksum
             .wrapping_add(self.bytes_per_sector)
             .wrapping_add(self.sectors_per_cluster)
             .wrapping_add(self.sector_count)
             .wrapping_add(self.fat_count);
-        if sum == 0 { Ok(()) } else { Err(HeaderError::BadChecksum) }
+        if sum == 0 {
+            Ok(())
+        } else {
+            Err(HeaderError::BadChecksum)
+        }
     }
 
     pub fn from_raw_bytes(bytes: &[u8]) -> Result<Self, HeaderError> {
@@ -75,11 +78,13 @@ impl Header {
             return Err(HeaderError::BadBytes);
         }
         let bytes_per_sector = u32::from_le_bytes(bytes[0..u32_size].try_into().unwrap());
-        let sectors_per_cluster= u32::from_le_bytes(bytes[u32_size..2 * u32_size].try_into().unwrap());
-        let sector_count = u32::from_le_bytes(bytes[2 * u32_size..3 * u32_size].try_into().unwrap());
+        let sectors_per_cluster =
+            u32::from_le_bytes(bytes[u32_size..2 * u32_size].try_into().unwrap());
+        let sector_count =
+            u32::from_le_bytes(bytes[2 * u32_size..3 * u32_size].try_into().unwrap());
         let fat_count = u32::from_le_bytes(bytes[3 * u32_size..4 * u32_size].try_into().unwrap());
         let checksum = u32::from_le_bytes(bytes[4 * u32_size..5 * u32_size].try_into().unwrap());
-        
+
         let fat = Self {
             bytes_per_sector,
             sectors_per_cluster,
